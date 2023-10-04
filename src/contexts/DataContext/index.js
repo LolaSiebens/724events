@@ -1,11 +1,5 @@
 import PropTypes from "prop-types";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 const DataContext = createContext({});
 
@@ -19,6 +13,9 @@ export const api = {
 export const DataProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
+  const [newData, setNewData] = useState(null);
+
+
   const getData = useCallback(async () => {
     try {
       setData(await api.loadData());
@@ -26,17 +23,34 @@ export const DataProvider = ({ children }) => {
       setError(err);
     }
   }, []);
+  // 
+
+  // Ajout de la fonction getNewData pour récupérer la dernière prestation
+  const getNewData = useCallback(async () => {
+    try {
+      if (data && data.events && data.events.length > 0) {
+        setNewData(data.events[data.events.length - 1]);
+      }
+    } catch (err) {
+      setError(err);
+    }
+  }, [data]);
+
+
+
   useEffect(() => {
-    if (data) return;
+    // L'ordre des appels est important
+    getNewData();
     getData();
-  });
-  
+  }, [getNewData]);
+
   return (
     <DataContext.Provider
       // eslint-disable-next-line react/jsx-no-constructed-context-values
       value={{
         data,
         error,
+        newData,
       }}
     >
       {children}
@@ -44,10 +58,12 @@ export const DataProvider = ({ children }) => {
   );
 };
 
+
 DataProvider.propTypes = {
   children: PropTypes.node.isRequired,
 }
 
 export const useData = () => useContext(DataContext);
+
 
 export default DataContext;

@@ -8,6 +8,8 @@ const mockContactApi = () => new Promise((resolve) => { setTimeout(resolve, 1000
 
 const Form = ({ onSuccess, onError }) => {
   const [sending, setSending] = useState(false);
+  const [formKey, setFormKey] = useState(0); // Clé unique pour le composant Form
+
   const sendContact = useCallback(
     async (evt) => {
       evt.preventDefault();
@@ -16,6 +18,10 @@ const Form = ({ onSuccess, onError }) => {
       try {
         await mockContactApi();
         setSending(false);
+        // Changer la clé pour réinitialiser le formulaire
+        setFormKey((prevKey) => prevKey + 1);
+        // Appeler la fonction onSuccess après le succès
+        onSuccess();
       } catch (err) {
         setSending(false);
         onError(err);
@@ -23,8 +29,9 @@ const Form = ({ onSuccess, onError }) => {
     },
     [onSuccess, onError]
   );
+
   return (
-    <form onSubmit={sendContact}>
+    <form key={formKey} onSubmit={sendContact}> {/* Utilisation de la clé pour réinitialiser le composant */}
       <div className="row">
         <div className="col">
           <Field placeholder="" label="Nom" />
