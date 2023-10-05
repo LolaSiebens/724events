@@ -6,10 +6,10 @@ L'application est le site d'une agence evenementielle.
 - NodeJS  >= v18.17.1
 
 ## Installation
-- `npm install`
+- `yarn install`
 
 ## Lancement de l'application
-- `npm start`
+- `yarn start`
 
 ## Tests
-- `npm test`
+- `yarn test`
