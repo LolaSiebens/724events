@@ -26,7 +26,7 @@ const EventList = () => {
     setType(evtType);
   };
 
-  const pageNumber = Math.ceil((filteredEvents?.length || 0) / PER_PAGE);
+  const pageNumber = Math.floor((filteredEvents?.length || 0) / PER_PAGE);
   const typeList = new Set(data?.events.map((event) => event.type));
 
   // Calcul de la pagination

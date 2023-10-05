@@ -60,7 +60,7 @@ const Slider = () => {
         <div className="SlideCard__pagination">
           {eventsWithKeys?.map((_, radioIdx) => (
             <input
-              key={_.id}
+              key={`${radioIdx + 1}`}
               type="radio"
               name="radio-button"
               checked={radioIdx === currentIndex}
